@@ -9,6 +9,7 @@ public class UINetworkManager : MonoBehaviour
     [SerializeField] private Button serverButton;
 
     [SerializeField] private GameObject NetworkCanvas;
+    [SerializeField] private GameObject GameUICanvas;
 
     private void Awake()
     {
@@ -16,18 +17,21 @@ public class UINetworkManager : MonoBehaviour
         {
             NetworkManager.Singleton.StartClient();
             NetworkCanvas.SetActive(false);
+            GameUICanvas.SetActive(true);
         });
 
         hostButton.onClick.AddListener(() =>
         {
             NetworkManager.Singleton.StartHost();
             NetworkCanvas.SetActive(false);
+            GameUICanvas.SetActive(true);
         });
 
         serverButton.onClick.AddListener(() =>
         {
             NetworkManager.Singleton.StartServer();
             NetworkCanvas.SetActive(false);
+            GameUICanvas.SetActive(true);
         });
     }
 }
