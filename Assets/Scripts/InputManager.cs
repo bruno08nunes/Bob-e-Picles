@@ -25,4 +25,9 @@ public class InputManager : MonoBehaviour
     {
         return move.ReadValue<Vector2>();
     }
+
+    public static bool WasAttackPressed()
+    {
+        return attack.WasPressedThisFrame();
+    }
 }
