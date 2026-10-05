@@ -53,20 +53,6 @@ public class PlayerMove : NetworkBehaviour
         anim.SetFloat(hashX, Mathf.Abs(lookDirection.x));
         anim.SetFloat(hashY, lookDirection.y);
 
-        //Virar o jogador para o lado certo
-        Vector3 scale = transform.localScale;
-
-        if (lookDirection.x < 0)
-        {
-            scale.x = -Mathf.Abs(scale.x);
-        }
-        else if (lookDirection.x > 0)
-        {
-            scale.x = Mathf.Abs(scale.x);
-        }
-
-        transform.localScale = scale;
-
         if (InputManager.WasAttackPressed())
         {
             spawnProjectile.ShootRpc(lookDirection);
@@ -97,5 +83,19 @@ public class PlayerMove : NetworkBehaviour
 
         float angle = Mathf.Atan2(lookDirection.y, lookDirection.x) * Mathf.Rad2Deg;
         attackOrigin.localRotation = Quaternion.Euler(0, 0, angle);
+
+        //Virar o jogador para o lado certo
+        Vector3 scale = transform.localScale;
+
+        if (lookDirection.x < 0)
+        {
+            scale.x = -Mathf.Abs(scale.x);
+        }
+        else if (lookDirection.x > 0)
+        {
+            scale.x = Mathf.Abs(scale.x);
+        }
+
+        transform.localScale = scale;
     }
 }

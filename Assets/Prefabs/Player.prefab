@@ -110,6 +110,7 @@ GameObject:
   - component: {fileID: 6395386315257441689}
   - component: {fileID: 7411404163252391728}
   - component: {fileID: 8515725706870723911}
+  - component: {fileID: -5153353232571997458}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -237,7 +238,7 @@ MonoBehaviour:
   PositionMaxInterpolationTime: 0.1
   RotationLerpSmoothing: 1
   RotationMaxInterpolationTime: 0.1
-  ScaleLerpSmoothing: 1
+  ScaleLerpSmoothing: 0
   ScaleMaxInterpolationTime: 0.1
   AuthorityMode: 0
   TickSyncChildren: 0
@@ -248,12 +249,12 @@ MonoBehaviour:
   SyncRotAngleX: 0
   SyncRotAngleY: 0
   SyncRotAngleZ: 0
-  SyncScaleX: 0
+  SyncScaleX: 1
   SyncScaleY: 0
   SyncScaleZ: 0
   PositionThreshold: 0.001
   RotAngleThreshold: 0.01
-  ScaleThreshold: 0.01
+  ScaleThreshold: 0
   UseQuaternionSynchronization: 0
   UseQuaternionCompression: 0
   UseHalfFloatPrecision: 0
@@ -389,3 +390,35 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &-5153353232571997458
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3911407563272141571}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e8d0727d5ae3244e3b569694d3912374, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShowTopMostFoldoutHeaderGroup: 1
+  NetworkAnimatorExpanded: 0
+  AuthorityMode: 1
+  m_Animator: {fileID: 8515725706870723911}
+  TransitionStateInfoList: []
+  AnimatorParameterEntries:
+    ParameterEntries:
+    - name: X
+      NameHash: -1213057461
+      Synchronize: 1
+      ParameterType: 1
+    - name: Y
+      NameHash: -1061878051
+      Synchronize: 1
+      ParameterType: 1
+    - name: IsWalking
+      NameHash: 1282839668
+      Synchronize: 1
+      ParameterType: 4
+  AnimatorParametersExpanded: 0
