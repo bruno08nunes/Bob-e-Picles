@@ -6,23 +6,20 @@ public class PlayerMove : NetworkBehaviour
     [SerializeField] float speed;
     [SerializeField] Transform attackOrigin;
     [SerializeField] float attackDistance = 1f;
+    [SerializeField] Animator animator;
 
     Vector2 direction;
-    Vector2 lookDirection;
+    public Vector2 LookDirection { get; private set; }
 
-    int hashWalking, hashX, hashY;
+    int hashIsWalking, hashX, hashY;
 
     Rigidbody2D rb;
-    Animator anim;
-    SpawnProjectile spawnProjectile;
 
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
-        anim = GetComponent<Animator>();
-        spawnProjectile = attackOrigin.GetComponent<SpawnProjectile>();
 
-        hashWalking = Animator.StringToHash("IsWalking");
+        hashIsWalking = Animator.StringToHash("IsWalking");
         hashX = Animator.StringToHash("X");
         hashY = Animator.StringToHash("Y");
     }
@@ -36,27 +33,23 @@ public class PlayerMove : NetworkBehaviour
 
         direction = InputManager.GetMove();
 
-        anim.SetBool(hashWalking, direction != Vector2.zero);
+        bool isWalking = direction != Vector2.zero;
+        animator.SetBool(hashIsWalking, isWalking);
 
         if (direction != Vector2.zero)
         {
             if (Mathf.Abs(direction.x) > Mathf.Abs(direction.y))
             {
-                lookDirection = new Vector2(Mathf.Sign(direction.x), 0);
+                LookDirection = new Vector2(Mathf.Sign(direction.x), 0);
             }
             else
             {
-                lookDirection = new Vector2(0, Mathf.Sign(direction.y));
+                LookDirection = new Vector2(0, Mathf.Sign(direction.y));
             }
         }
 
-        anim.SetFloat(hashX, Mathf.Abs(lookDirection.x));
-        anim.SetFloat(hashY, lookDirection.y);
-
-        if (InputManager.WasAttackPressed())
-        {
-            spawnProjectile.ShootRpc(lookDirection);
-        }
+        animator.SetFloat(hashX, Mathf.Abs(LookDirection.x));
+        animator.SetFloat(hashY, LookDirection.y);
     }
 
     private void FixedUpdate()
@@ -66,7 +59,7 @@ public class PlayerMove : NetworkBehaviour
             return;
         }
 
-        SendMovementServerRpc(direction, lookDirection);
+        SendMovementServerRpc(direction, LookDirection);
     }
 
     [Rpc(SendTo.Server)]
@@ -74,17 +67,18 @@ public class PlayerMove : NetworkBehaviour
     {
         rb.linearVelocity = direction * speed;
 
-        if (direction == Vector2.zero)
+        bool isWalking = direction != Vector2.zero;
+        if (!isWalking)
         {
             return;
         }
 
-        attackOrigin.localPosition = lookDirection * attackDistance;
+        ChangeAttackOriginPosition(lookDirection);
+        ChangePlayerXScale(lookDirection);
+    }
 
-        float angle = Mathf.Atan2(lookDirection.y, lookDirection.x) * Mathf.Rad2Deg;
-        attackOrigin.localRotation = Quaternion.Euler(0, 0, angle);
-
-        //Virar o jogador para o lado certo
+    private void ChangePlayerXScale(Vector2 lookDirection)
+    {
         Vector3 scale = transform.localScale;
 
         if (lookDirection.x < 0)
@@ -97,5 +91,12 @@ public class PlayerMove : NetworkBehaviour
         }
 
         transform.localScale = scale;
+    }
+
+    private void ChangeAttackOriginPosition(Vector2 lookDirection)
+    {
+        attackOrigin.localPosition = new Vector2(Mathf.Abs(lookDirection.x), lookDirection.y) * attackDistance;
+        float angle = Mathf.Atan2(lookDirection.y, Mathf.Abs(lookDirection.x)) * Mathf.Rad2Deg;
+        attackOrigin.localRotation = Quaternion.Euler(0, 0, angle);
     }
 }
