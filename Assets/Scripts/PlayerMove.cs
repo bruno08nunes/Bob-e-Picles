@@ -10,13 +10,21 @@ public class PlayerMove : NetworkBehaviour
     Vector2 direction;
     Vector2 lookDirection;
 
+    int hashWalking, hashX, hashY;
+
     Rigidbody2D rb;
+    Animator anim;
     SpawnProjectile spawnProjectile;
 
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
+        anim = GetComponent<Animator>();
         spawnProjectile = attackOrigin.GetComponent<SpawnProjectile>();
+
+        hashWalking = Animator.StringToHash("IsWalking");
+        hashX = Animator.StringToHash("X");
+        hashY = Animator.StringToHash("Y");
     }
 
     void Update()
@@ -27,6 +35,8 @@ public class PlayerMove : NetworkBehaviour
         }
 
         direction = InputManager.GetMove();
+
+        anim.SetBool(hashWalking, direction != Vector2.zero);
 
         if (direction != Vector2.zero)
         {
@@ -39,6 +49,23 @@ public class PlayerMove : NetworkBehaviour
                 lookDirection = new Vector2(0, Mathf.Sign(direction.y));
             }
         }
+
+        anim.SetFloat(hashX, Mathf.Abs(lookDirection.x));
+        anim.SetFloat(hashY, lookDirection.y);
+
+        //Virar o jogador para o lado certo
+        Vector3 scale = transform.localScale;
+
+        if (lookDirection.x < 0)
+        {
+            scale.x = -Mathf.Abs(scale.x);
+        }
+        else if (lookDirection.x > 0)
+        {
+            scale.x = Mathf.Abs(scale.x);
+        }
+
+        transform.localScale = scale;
 
         if (InputManager.WasAttackPressed())
         {
