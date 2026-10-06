@@ -223,6 +223,7 @@ MonoBehaviour:
   attackOrigin: {fileID: 7061106487903432060}
   attackDistance: 1
   animator: {fileID: 560115481816191536}
+  isMultiplayer: 1
 --- !u!50 &-2985942418925416823
 Rigidbody2D:
   serializedVersion: 5

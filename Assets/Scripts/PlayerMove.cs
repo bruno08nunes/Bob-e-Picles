@@ -7,6 +7,7 @@ public class PlayerMove : NetworkBehaviour
     [SerializeField] Transform attackOrigin;
     [SerializeField] float attackDistance = 1f;
     [SerializeField] Animator animator;
+    [SerializeField] bool isMultiplayer;
 
     Vector2 direction;
     public Vector2 LookDirection { get; private set; }
@@ -59,11 +60,22 @@ public class PlayerMove : NetworkBehaviour
             return;
         }
 
-        SendMovementServerRpc(direction, LookDirection);
+        if (isMultiplayer)
+        {
+            SendMovementServerRpc(direction, LookDirection);
+            return;
+        }
+
+        Move(direction, LookDirection);
     }
 
     [Rpc(SendTo.Server)]
     private void SendMovementServerRpc(Vector2 direction, Vector2 lookDirection)
+    {
+        Move(direction, lookDirection);
+    }
+
+    private void Move(Vector2 direction, Vector2 lookDirection)
     {
         rb.linearVelocity = direction * speed;
 
