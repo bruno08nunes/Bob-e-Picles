@@ -9,7 +9,6 @@ public class Enemy : NetworkBehaviour
 
     [SerializeField] private SpriteRenderer spriteRenderer;
     [SerializeField] private Transform spriteTransform;
-
     [SerializeField] private CapsuleCollider2D collider;
 
     private Color originalColor;
@@ -32,11 +31,6 @@ public class Enemy : NetworkBehaviour
 
     private void Update()
     {
-        if (!IsServer)
-        {
-            return;
-        }
-
         if (isDead)
         {
             UpdateDeathAnimation();
@@ -62,42 +56,73 @@ public class Enemy : NetworkBehaviour
         }
 
         isInvulnerable = true;
+
         hitTimer = 0.2f;
-        StartCoroutine(DamageEffect());
+
+        StartCoroutine(InvulnerabilityCooldown());
+        DamageClientRpc();
     }
 
-    void Die()
+    private void Die()
     {
         if (isDead)
         {
             return;
         }
 
-        Destroy(collider);
         isDead = true;
         isInvulnerable = true;
-        deathTimer = 0;
+        deathTimer = 0f;
+
         StopAllCoroutines();
+
         spriteRenderer.color = originalColor;
+
+        collider.enabled = false;
+        DeathClientRpc();
     }
 
-    private IEnumerator DamageEffect()
+    [ClientRpc]
+    private void DamageClientRpc()
     {
-        float invulnerabilityTimer = 0f;
+        hitTimer = 0.2f;
 
-        while (invulnerabilityTimer < invulnerabilityDuration)
+        StartCoroutine(DamageFlashEffect());
+    }
+
+    private IEnumerator InvulnerabilityCooldown()
+    {
+        yield return new WaitForSeconds(invulnerabilityDuration);
+
+        isInvulnerable = false;
+    }
+
+    private IEnumerator DamageFlashEffect()
+    {
+        float timer = 0f;
+
+        while (timer < invulnerabilityDuration && !isDead)
         {
             spriteRenderer.color = Color.Lerp(originalColor, Color.red, 0.8f);
+
             yield return new WaitForSeconds(flashInterval);
+
+            if (isDead)
+            {
+                break;
+            }
 
             spriteRenderer.color = originalColor;
+
             yield return new WaitForSeconds(flashInterval);
 
-            invulnerabilityTimer += flashInterval * 2f;
+            timer += flashInterval * 2f;
         }
 
-        spriteRenderer.color = originalColor;
-        isInvulnerable = false;
+        if (!isDead)
+        {
+            spriteRenderer.color = originalColor;
+        }
     }
 
     private void UpdateHitAnimation()
@@ -124,13 +149,26 @@ public class Enemy : NetworkBehaviour
         }
     }
 
+    [ClientRpc]
+    private void DeathClientRpc()
+    {
+        isDead = true;
+        isInvulnerable = true;
+        deathTimer = 0f;
+
+        StopAllCoroutines();
+
+        spriteRenderer.color = originalColor;
+        collider.enabled = false;
+    }
+
     private void UpdateDeathAnimation()
     {
         float dt = Time.deltaTime;
+
         deathTimer += dt;
 
-        spriteTransform.localPosition +=
-            Vector3.down * (0.15f + deathTimer * 0.35f) * dt;
+        spriteTransform.localPosition =  (0.15f + deathTimer * 0.35f) * dt * Vector3.down;
 
         spriteTransform.localRotation = Quaternion.Slerp(
             spriteTransform.localRotation,
@@ -148,10 +186,9 @@ public class Enemy : NetworkBehaviour
         color.a = Mathf.Lerp(color.a, 0f, 3f * dt);
         spriteRenderer.color = color;
 
-        if (deathTimer >= 1f)
+        if (deathTimer >= 1f && IsServer)
         {
             GetComponent<NetworkObject>().Despawn();
-            Destroy(gameObject);
         }
     }
 }
