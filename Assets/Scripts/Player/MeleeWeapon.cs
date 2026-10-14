@@ -37,6 +37,10 @@ public class MeleeWeapon : NetworkBehaviour
             return;
         }
 
-        Debug.Log("Colidiu");
+        Enemy enemy = collision.gameObject.GetComponent<Enemy>();
+        if (enemy != null)
+        {
+            enemy.TakeDamage(2);
+        }
     }
 }

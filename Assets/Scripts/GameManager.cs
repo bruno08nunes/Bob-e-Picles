@@ -8,6 +8,7 @@ public class GameManager : NetworkBehaviour
     public NetworkVariable<int> Points { get; private set; } = new NetworkVariable<int>();
 
     [SerializeField] GameObject collectablePrefab;
+    [SerializeField] GameObject enemyPrefab;
 
     private void Awake()
     {
@@ -27,6 +28,12 @@ public class GameManager : NetworkBehaviour
             for (float position = -4f; position <= 4f; position += 2)
             {
                 var instance = Instantiate(collectablePrefab, new Vector3(position, 4, 0), Quaternion.Euler(new Vector3(0f, 0f, 0f)));
+                instance.GetComponent<NetworkObject>().Spawn();
+            }
+
+            for (float position = -4f; position <= 4f; position += 8)
+            {
+                var instance = Instantiate(enemyPrefab, new Vector3(position, 1, 0), Quaternion.Euler(new Vector3(0f, 0f, 0f)));
                 instance.GetComponent<NetworkObject>().Spawn();
             }
         };

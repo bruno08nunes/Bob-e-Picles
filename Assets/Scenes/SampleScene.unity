@@ -916,6 +916,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ShowTopMostFoldoutHeaderGroup: 1
   collectablePrefab: {fileID: 2955940035790525438, guid: b10ba4d9ce355524cb18dce330b001c6, type: 3}
+  enemyPrefab: {fileID: 3911407563272141571, guid: 41614141305ac3c48b86f3a5cf5ce768, type: 3}
 --- !u!1 &709087872
 GameObject:
   m_ObjectHideFlags: 0
