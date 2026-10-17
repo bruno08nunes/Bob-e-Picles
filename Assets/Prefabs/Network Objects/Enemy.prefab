@@ -276,11 +276,10 @@ GameObject:
   - component: {fileID: 3919985652853586773}
   - component: {fileID: -5382122749242000651}
   - component: {fileID: 146226506843236676}
-  - component: {fileID: -2985942418925416823}
-  - component: {fileID: 7411404163252391728}
   - component: {fileID: 3939367523905996761}
   - component: {fileID: 103387013354929713}
   - component: {fileID: 4652929794581597870}
+  - component: {fileID: 6462637391080441255}
   m_Layer: 0
   m_Name: Enemy
   m_TagString: Untagged
@@ -378,50 +377,6 @@ MonoBehaviour:
   SwitchTransformSpaceWhenParented: 0
   Interpolate: 1
   SlerpPosition: 0
---- !u!50 &-2985942418925416823
-Rigidbody2D:
-  serializedVersion: 5
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3911407563272141571}
-  m_BodyType: 0
-  m_Simulated: 1
-  m_UseFullKinematicContacts: 0
-  m_UseAutoMass: 0
-  m_Mass: 1
-  m_LinearDamping: 0
-  m_AngularDamping: 0.05
-  m_GravityScale: 0
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_Interpolate: 0
-  m_SleepingMode: 1
-  m_CollisionDetection: 0
-  m_Constraints: 4
---- !u!114 &7411404163252391728
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3911407563272141571}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 80d7c879794dfda4687da0e400131852, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ShowTopMostFoldoutHeaderGroup: 1
-  NetworkRigidbodyBaseExpanded: 0
-  UseRigidBodyForMotion: 0
-  AutoUpdateKinematicState: 1
-  AutoSetKinematicOnDespawn: 1
 --- !u!114 &3939367523905996761
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -434,10 +389,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fd0682cfb9fdf7148881638322e3c152, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ShowTopMostFoldoutHeaderGroup: 1
-  speed: 3
-  targedUpdateInterval: 0.25
+  targetUpdateInterval: 0.25
   animator: {fileID: 560115481816191536}
+  spriteRenderer: {fileID: 4363211988109751681}
 --- !u!70 &103387013354929713
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -492,6 +446,29 @@ MonoBehaviour:
   flashInterval: 0.1
   spriteRenderer: {fileID: 4363211988109751681}
   spriteTransform: {fileID: 4803503847927066771}
+  collider: {fileID: 0}
+--- !u!195 &6462637391080441255
+NavMeshAgent:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3911407563272141571}
+  m_Enabled: 1
+  m_AgentTypeID: 0
+  m_Radius: 0.5
+  m_Speed: 3.5
+  m_Acceleration: 8
+  avoidancePriority: 50
+  m_AngularSpeed: 120
+  m_StoppingDistance: 0
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 1
+  m_AutoRepath: 1
+  m_Height: 2
+  m_BaseOffset: 0
+  m_WalkableMask: 4294967295
+  m_ObstacleAvoidanceType: 4
 --- !u!1 &6785455453488607449
 GameObject:
   m_ObjectHideFlags: 0

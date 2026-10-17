@@ -1,98 +1,122 @@
-using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.AI;
 
-public class EnemyChase : NetworkBehaviour
+public class EnemyChase : MonoBehaviour
 {
-    [SerializeField] float speed = 3f;
-    [SerializeField] float targedUpdateInterval = 0.25f;
-    [SerializeField] Animator animator;
+    [SerializeField] private float targetUpdateInterval = 0.25f;
+    [SerializeField] private Animator animator;
+    [SerializeField] private SpriteRenderer spriteRenderer;
 
-    Rigidbody2D rb;
 
-    Transform target;
-    Transform[] players;
-    float targetUpdateTimer;
+    private NavMeshAgent agent;
+    private Transform[] players;
+    private Transform target;
+    private float timer;
 
-    bool isWalking;
+    private bool isWalking;
 
-    int hashIsWalking, hashX, hashY;
+    private int hashIsWalking;
+    private int hashX;
+    private int hashY;
+
+    private Vector2 lastDirection = Vector2.down;
 
     private void Awake()
     {
-        rb = GetComponent<Rigidbody2D>();
+        agent = GetComponent<NavMeshAgent>();
+
+        agent.updateRotation = false;
+        agent.updateUpAxis = false;
 
         hashIsWalking = Animator.StringToHash("IsWalking");
         hashX = Animator.StringToHash("X");
         hashY = Animator.StringToHash("Y");
     }
 
-    void Start()
+    private void Start()
     {
-        GameObject[] playerObjects = GameObject.FindGameObjectsWithTag("Player");
-        players = new Transform[playerObjects.Length];
+        GameObject[] objects =
+            GameObject.FindGameObjectsWithTag("Player");
 
-        for (int i = 0; i < playerObjects.Length; i++)
-        {
-            players[i] = playerObjects[i].transform;
-        }
+        players = new Transform[objects.Length];
+
+        for (int i = 0; i < objects.Length; i++)
+            players[i] = objects[i].transform;
 
         FindClosestPlayer();
+        UpdateDestination();
     }
 
-    void Update()
+    private void Update()
     {
-        targetUpdateTimer += Time.deltaTime;
+        timer += Time.deltaTime;
 
-        if (targetUpdateTimer >= targedUpdateInterval)
+        if (timer >= targetUpdateInterval)
         {
-            targetUpdateTimer = 0;
+            timer = 0f;
             FindClosestPlayer();
+            UpdateDestination();
         }
+
+        UpdateAnimation();
     }
 
-    private void FixedUpdate()
-    {
-        if (target == null)
-        {
-            rb.linearVelocity = Vector2.zero;
-            isWalking = false;
-            animator.SetBool(hashIsWalking, false);
-
-            return;
-        }
-
-        Vector2 direction = ((Vector2)target.position - rb.position).normalized;
-
-        rb.linearVelocity = direction * speed;
-
-        if (!isWalking)
-        {
-            isWalking = true;
-            animator.SetBool(hashIsWalking, true);
-        }
-    }
-
-    void FindClosestPlayer()
+    private void FindClosestPlayer()
     {
         float closestDistance = Mathf.Infinity;
-        Transform closestPlayer = null;
+        Transform closest = null;
 
         foreach (Transform player in players)
         {
-            if (player == null || !player.gameObject.activeInHierarchy)
-            {
+            if (player == null ||
+                !player.gameObject.activeInHierarchy)
                 continue;
-            }
 
-            float distance = Vector2.Distance(rb.position, player.position);
+            float distance =
+                ((Vector2)player.position -
+                 (Vector2)transform.position).sqrMagnitude;
 
             if (distance < closestDistance)
             {
                 closestDistance = distance;
-                closestPlayer = player;
+                closest = player;
             }
         }
 
-        target = closestPlayer;
+        target = closest;
+    }
+
+    private void UpdateDestination()
+    {
+        if (target != null && agent.isOnNavMesh)
+            agent.SetDestination(target.position);
+        else if (agent.isOnNavMesh)
+            agent.ResetPath();
+    }
+
+    private void UpdateAnimation()
+    {
+        if (animator == null)
+            return;
+
+        Vector2 velocity = agent.velocity;
+        bool walking = velocity.sqrMagnitude > 0.01f;
+
+        if (walking)
+        {
+            lastDirection = velocity.normalized;
+
+            if (spriteRenderer != null && Mathf.Abs(velocity.x) > 0.01f)
+                spriteRenderer.flipX = velocity.x < 0f;
+        }
+
+        if (walking != isWalking)
+        {
+            isWalking = walking;
+            animator.SetBool(hashIsWalking, isWalking);
+        }
+
+        animator.SetFloat(hashX, Mathf.Abs(lastDirection.x));
+        animator.SetFloat(hashY, lastDirection.y);
     }
 }
