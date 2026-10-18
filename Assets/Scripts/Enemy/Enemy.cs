@@ -9,7 +9,7 @@ public class Enemy : NetworkBehaviour
 
     [SerializeField] private SpriteRenderer spriteRenderer;
     [SerializeField] private Transform spriteTransform;
-    [SerializeField] private CapsuleCollider2D collider;
+    private new CapsuleCollider2D collider;
 
     private Color originalColor;
     private Quaternion originalRotation;

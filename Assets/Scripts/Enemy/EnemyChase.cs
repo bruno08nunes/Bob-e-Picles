@@ -1,3 +1,4 @@
+
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -6,8 +7,10 @@ public class EnemyChase : MonoBehaviour
     [SerializeField] private float targetUpdateInterval = 0.25f;
     [SerializeField] private Animator animator;
     [SerializeField] private SpriteRenderer spriteRenderer;
+    [SerializeField] private Transform attackOrigin;
+    [SerializeField] private float attackDistance = 1f;
 
-
+    private EnemyAttack enemyAttack;
     private NavMeshAgent agent;
     private Transform[] players;
     private Transform target;
@@ -24,6 +27,7 @@ public class EnemyChase : MonoBehaviour
     private void Awake()
     {
         agent = GetComponent<NavMeshAgent>();
+        enemyAttack = GetComponent<EnemyAttack>();
 
         agent.updateRotation = false;
         agent.updateUpAxis = false;
@@ -56,6 +60,16 @@ public class EnemyChase : MonoBehaviour
             timer = 0f;
             FindClosestPlayer();
             UpdateDestination();
+        }
+
+        if (target != null)
+        {
+            float distance =
+                ((Vector2)target.position -
+                 (Vector2)transform.position).sqrMagnitude;
+
+            if (distance < 5f)
+                enemyAttack.Attack();
         }
 
         UpdateAnimation();
@@ -104,10 +118,13 @@ public class EnemyChase : MonoBehaviour
 
         if (walking)
         {
-            lastDirection = velocity.normalized;
+            if (Mathf.Abs(velocity.x) > Mathf.Abs(velocity.y))
+                lastDirection = new Vector2(Mathf.Sign(velocity.x), 0f);
+            else
+                lastDirection = new Vector2(0f, Mathf.Sign(velocity.y));
 
-            if (spriteRenderer != null && Mathf.Abs(velocity.x) > 0.01f)
-                spriteRenderer.flipX = velocity.x < 0f;
+            if (spriteRenderer != null && Mathf.Abs(lastDirection.x) > 0f)
+                spriteRenderer.flipX = lastDirection.x < 0f;
         }
 
         if (walking != isWalking)
@@ -118,5 +135,22 @@ public class EnemyChase : MonoBehaviour
 
         animator.SetFloat(hashX, Mathf.Abs(lastDirection.x));
         animator.SetFloat(hashY, lastDirection.y);
+
+        ChangeAttackOriginPosition(lastDirection);
+    }
+
+    private void ChangeAttackOriginPosition(Vector2 lookDirection)
+    {
+        if (attackOrigin == null)
+            return;
+
+        attackOrigin.localPosition = lookDirection * attackDistance;
+
+        float angle = Mathf.Atan2(
+            lookDirection.y,
+            lookDirection.x
+        ) * Mathf.Rad2Deg;
+
+        attackOrigin.localRotation = Quaternion.Euler(0f, 0f, angle);
     }
 }

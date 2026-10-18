@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 312426410156708171}
   - component: {fileID: 2101113470389094865}
   - component: {fileID: 6993107915576984315}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: weapon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -128,7 +128,7 @@ BoxCollider2D:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 64
   m_LayerOverridePriority: 0
   m_ForceSendLayers:
     serializedVersion: 2
@@ -182,7 +182,7 @@ GameObject:
   - component: {fileID: 7061106487903432060}
   - component: {fileID: 7780173535921617172}
   - component: {fileID: 2040972129457006}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Attack Origin
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -281,7 +281,8 @@ GameObject:
   - component: {fileID: 7411404163252391728}
   - component: {fileID: -6067965271533939994}
   - component: {fileID: 1624942764016206224}
-  m_Layer: 0
+  - component: {fileID: 1119793174216375952}
+  m_Layer: 6
   m_Name: Bob
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -492,6 +493,24 @@ CapsuleCollider2D:
   m_Offset: {x: 0, y: -0.06}
   m_Size: {x: 0.75, y: 1.8}
   m_Direction: 0
+--- !u!114 &1119793174216375952
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3911407563272141571}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d7f272341b550164d95a6488a2cd7f86, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShowTopMostFoldoutHeaderGroup: 1
+  invulnerabilityDuration: 0.8
+  flashInterval: 0.1
+  spriteRenderer: {fileID: 4363211988109751681}
+  spriteTransform: {fileID: 4803503847927066771}
+  collider: {fileID: 1624942764016206224}
 --- !u!1 &6785455453488607449
 GameObject:
   m_ObjectHideFlags: 0
@@ -504,7 +523,7 @@ GameObject:
   - component: {fileID: 4363211988109751681}
   - component: {fileID: 560115481816191536}
   - component: {fileID: 8678375172401993899}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Sprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}

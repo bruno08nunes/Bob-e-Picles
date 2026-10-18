@@ -37,10 +37,16 @@ public class MeleeWeapon : NetworkBehaviour
             return;
         }
 
-        Enemy enemy = collision.gameObject.GetComponent<Enemy>();
-        if (enemy != null)
+        if (collision.gameObject.TryGetComponent<Enemy>(out var enemy))
         {
             enemy.TakeDamage(2);
+            return;
+        }
+
+        if (collision.gameObject.TryGetComponent<Player>(out var player))
+        {
+            player.TakeDamage(2);
+            return;
         }
     }
 }
