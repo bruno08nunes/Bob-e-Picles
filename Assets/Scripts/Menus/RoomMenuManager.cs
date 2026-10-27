@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using TMPro;
 using Unity.Services.Multiplayer;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class RoomMenuManager : MonoBehaviour
@@ -10,6 +11,8 @@ public class RoomMenuManager : MonoBehaviour
     [SerializeField] private GameObject joinRoomSection;
     [SerializeField] private GameObject roomListSection;
     [SerializeField] private GameObject roomSection;
+
+    [SerializeField] private GameObject changeCharacterButton;
 
     static RoomMenuManager Instance;
 
@@ -91,20 +94,36 @@ public class RoomMenuManager : MonoBehaviour
         Destroy(item.gameObject);
     }
 
-    public static void ChangePlayerCharacter()
+    public static void ChangePlayerCharacter(char player1Character)
     {
-        PlayerListItem player1 = Instance.playerListItems[0];
-        PlayerListItem player2 = Instance.playerListItems[1];
-
-        if (player1 == null || player2 == null)
+        if (Instance.playerListItems == null || Instance.playerListItems.Count == 0)
         {
             return;
         }
 
-        string player1Character = player1.GetCharacter();
-        string player2Character = player2.GetCharacter();
+        PlayerListItem player1 = Instance.playerListItems[0];
 
-        player1.SetCharacter(player2Character);
-        player2.SetCharacter(player1Character);
+        string player1CharacterName = player1Character == 'B' ? "Bob" : "Picles";
+        player1.SetCharacter(player1CharacterName);
+
+        if (Instance.playerListItems == null || Instance.playerListItems.Count == 1)
+        {
+            return;
+        }
+
+        PlayerListItem player2 = Instance.playerListItems[1];
+
+        if (player2 == null)
+        {
+            return;
+        }
+
+        string player2CharacterName = player1Character != 'B' ? "Bob" : "Picles";
+        player2.SetCharacter(player2CharacterName);
+    }
+
+    public static void DestroyChangeCharacterButton()
+    {
+        Destroy(Instance.changeCharacterButton);
     }
 }

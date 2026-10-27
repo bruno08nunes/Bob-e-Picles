@@ -7,6 +7,7 @@ using Unity.Services.Authentication;
 using Unity.Services.Core;
 using Unity.Services.Multiplayer;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class SessionManager : MonoBehaviour
 {
@@ -18,6 +19,7 @@ public class SessionManager : MonoBehaviour
     [SerializeField] private Transform roomListContent;
     [SerializeField] private RoomListItem roomItemPrefab;
 
+
     private ISession currentSession;
     private bool servicesReady;
     private bool busy;
@@ -28,6 +30,20 @@ public class SessionManager : MonoBehaviour
     private const string SecondPlayerId = "Player 2";
 
     public ISession CurrentSession => currentSession;
+
+    private static SessionManager Instance;
+
+    private void Awake()
+    {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+
+        Instance = this;
+        DontDestroyOnLoad(gameObject);
+    }
 
     private async void Start()
     {
@@ -130,6 +146,8 @@ public class SessionManager : MonoBehaviour
         {
             SetStatus("Entrando na sala...");
 
+            RoomMenuManager.AddPlayerListItem(HostPlayerId, "Bob");
+
             currentSession = await MultiplayerService.Instance.JoinSessionByCodeAsync(code);
 
             secondPlayerAdded = false;
@@ -145,8 +163,9 @@ public class SessionManager : MonoBehaviour
             }
 
             RoomMenuManager.ChangeToRoomSection();
+            RoomMenuManager.DestroyChangeCharacterButton();
+            PlayerCharacterMenuSync.UpdateInterface();
 
-            RoomMenuManager.AddPlayerListItem(HostPlayerId, "Bob");
             UpdateSecondPlayerItem();
 
             SetStatus($"Você entrou em: {currentSession.Name}");
@@ -211,6 +230,8 @@ public class SessionManager : MonoBehaviour
         {
             SetStatus("Entrando na sala...");
 
+            RoomMenuManager.AddPlayerListItem(HostPlayerId, "Bob");
+
             currentSession = await MultiplayerService.Instance.JoinSessionByIdAsync(sessionId);
 
             secondPlayerAdded = false;
@@ -226,8 +247,8 @@ public class SessionManager : MonoBehaviour
             }
 
             RoomMenuManager.ChangeToRoomSection();
-
-            RoomMenuManager.AddPlayerListItem(HostPlayerId, "Bob");
+            RoomMenuManager.DestroyChangeCharacterButton();
+            PlayerCharacterMenuSync.UpdateInterface();
 
             UpdateSecondPlayerItem();
 
@@ -291,9 +312,7 @@ public class SessionManager : MonoBehaviour
 
         if (hasSecondPlayer && !secondPlayerAdded)
         {
-            RoomMenuManager.AddPlayerListItem(
-                SecondPlayerId,
-                "Picles");
+            RoomMenuManager.AddPlayerListItem(SecondPlayerId, "Picles");
 
             secondPlayerAdded = true;
 
@@ -304,6 +323,8 @@ public class SessionManager : MonoBehaviour
             RoomMenuManager.RemovePlayerListItem(SecondPlayerId);
 
             secondPlayerAdded = false;
+
+            PlayerCharacterMenuSync.ResetCharacters();
 
             SetStatus("Segundo Jogador saiu da sala.");
         }
@@ -403,6 +424,37 @@ public class SessionManager : MonoBehaviour
         {
             busy = false;
         }
+    }
+
+    public void StartGame()
+    {
+        if (currentSession == null)
+        {
+            SetStatus("Você não está em uma sala.");
+            return;
+        }
+
+        if (!currentSession.IsHost)
+        {
+            SetStatus("Somente o host pode iniciar o jogo.");
+            return;
+        }
+
+        if (currentSession.Players.Count < 2)
+        {
+            SetStatus("É necessário ter dois jogadores na sala.");
+            return;
+        }
+
+        NetworkManager networkManager = NetworkManager.Singleton;
+
+        if (networkManager == null || !networkManager.IsListening)
+        {
+            Debug.LogError("O Netcode não está ativo. Verifique a integração com Relay.");
+            return;
+        }
+
+        networkManager.SceneManager.LoadScene("Game", LoadSceneMode.Single);
     }
 
     private bool CanStartOperation()
