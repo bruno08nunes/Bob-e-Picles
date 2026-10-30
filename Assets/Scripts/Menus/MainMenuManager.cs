@@ -5,7 +5,9 @@ public class MainMenuManager : MonoBehaviour
 {
     public void StartGameLocal()
     {
-        SceneManager.LoadScene("Game");
+        Debug.Log("Not Created");
+
+        return;
     }
 
     public void StartGameOnline()

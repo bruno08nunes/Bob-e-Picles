@@ -71,15 +71,6 @@ public class GameManager : NetworkBehaviour
         if (clientIds.Count != 2)
         {
             Debug.LogError($"Esperados 2 clientes, mas existem {clientIds.Count}.");
-            return;
-        }
-
-        PlayerCharacterMenuSync characterSync = PlayerCharacterMenuSync.Instance;
-
-        if (characterSync == null || !characterSync.IsSpawned)
-        {
-            Debug.LogError("PlayerCharacterMenuSync não existe ou não foi spawnado na rede.");
-            return;
         }
 
         ulong hostId = NetworkManager.ServerClientId;
@@ -93,6 +84,30 @@ public class GameManager : NetworkBehaviour
                 secondPlayerId = id;
                 break;
             }
+        }
+
+        PlayerCharacterMenuSync characterSync = PlayerCharacterMenuSync.Instance;
+
+        if (characterSync == null || !characterSync.IsSpawned)
+        {
+            Debug.LogError("PlayerCharacterMenuSync não existe ou não foi spawnado na rede.");
+
+            if (clientIds.Count == 1)
+            {
+                SpawnPlayer(hostId, 'B', player1SpawnPoint);
+            }
+            else
+            {
+                if (secondPlayerId == ulong.MaxValue)
+                {
+                    Debug.LogError("Não foi possível encontrar o segundo jogador.");
+                    return;
+                }
+
+                SpawnPlayer(secondPlayerId, 'P', player2SpawnPoint);
+            }
+
+            return;
         }
 
         if (secondPlayerId == ulong.MaxValue)

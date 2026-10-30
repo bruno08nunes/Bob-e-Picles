@@ -41,10 +41,11 @@ public class PlayerAttack : NetworkBehaviour
             return;
         }
 
+        playerAnimator.SetTrigger(attackHash);
+
         if (isMelee)
         {
             meleeAttack.AttackRpc();
-            playerAnimator.SetTrigger(attackHash);
             return;
         }
 
