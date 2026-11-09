@@ -45,7 +45,7 @@ public class MeleeWeapon : NetworkBehaviour
 
         if (collision.gameObject.TryGetComponent<Player>(out var player))
         {
-            player.TakeDamage(2);
+            //player.TakeDamage(2);
             return;
         }
     }

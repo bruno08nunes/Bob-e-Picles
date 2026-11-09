@@ -275,10 +275,8 @@ GameObject:
   m_Component:
   - component: {fileID: 3919985652853586773}
   - component: {fileID: -5382122749242000651}
-  - component: {fileID: 146226506843236676}
   - component: {fileID: 8722526181917738553}
   - component: {fileID: -2985942418925416823}
-  - component: {fileID: 7411404163252391728}
   - component: {fileID: -6067965271533939994}
   - component: {fileID: 1624942764016206224}
   - component: {fileID: 1119793174216375952}
@@ -333,52 +331,6 @@ MonoBehaviour:
   AutoObjectParentSync: 1
   SyncOwnerTransformWhenParented: 1
   AllowOwnerToParent: 0
---- !u!114 &146226506843236676
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3911407563272141571}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e96cb6065543e43c4a752faaa1468eb1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ShowTopMostFoldoutHeaderGroup: 1
-  NetworkTransformExpanded: 0
-  AutoOwnerAuthorityTickOffset: 1
-  PositionInterpolationType: 0
-  RotationInterpolationType: 0
-  ScaleInterpolationType: 0
-  PositionLerpSmoothing: 1
-  PositionMaxInterpolationTime: 0.1
-  RotationLerpSmoothing: 1
-  RotationMaxInterpolationTime: 0.1
-  ScaleLerpSmoothing: 0
-  ScaleMaxInterpolationTime: 0.1
-  AuthorityMode: 0
-  TickSyncChildren: 0
-  UseUnreliableDeltas: 0
-  SyncPositionX: 1
-  SyncPositionY: 1
-  SyncPositionZ: 0
-  SyncRotAngleX: 0
-  SyncRotAngleY: 0
-  SyncRotAngleZ: 0
-  SyncScaleX: 1
-  SyncScaleY: 0
-  SyncScaleZ: 0
-  PositionThreshold: 0.001
-  RotAngleThreshold: 0.01
-  ScaleThreshold: 0
-  UseQuaternionSynchronization: 0
-  UseQuaternionCompression: 0
-  UseHalfFloatPrecision: 0
-  InLocalSpace: 0
-  SwitchTransformSpaceWhenParented: 0
-  Interpolate: 1
-  SlerpPosition: 0
 --- !u!114 &8722526181917738553
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -396,7 +348,11 @@ MonoBehaviour:
   attackOrigin: {fileID: 7061106487903432060}
   attackDistance: 1
   animator: {fileID: 560115481816191536}
-  isMultiplayer: 1
+  interpolationBackTime: 0.1
+  predictionCollisionLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  collisionSkin: 0.02
 --- !u!50 &-2985942418925416823
 Rigidbody2D:
   serializedVersion: 5
@@ -422,25 +378,8 @@ Rigidbody2D:
     m_Bits: 0
   m_Interpolate: 0
   m_SleepingMode: 1
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
   m_Constraints: 4
---- !u!114 &7411404163252391728
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3911407563272141571}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 80d7c879794dfda4687da0e400131852, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ShowTopMostFoldoutHeaderGroup: 1
-  NetworkRigidbodyBaseExpanded: 0
-  UseRigidBodyForMotion: 0
-  AutoUpdateKinematicState: 1
-  AutoSetKinematicOnDespawn: 1
 --- !u!114 &-6067965271533939994
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -456,6 +395,7 @@ MonoBehaviour:
   ShowTopMostFoldoutHeaderGroup: 1
   attackOrigin: {fileID: 7061106487903432060}
   playerAnimator: {fileID: 560115481816191536}
+  attackDelay: 0.5
 --- !u!70 &1624942764016206224
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -510,7 +450,6 @@ MonoBehaviour:
   flashInterval: 0.1
   spriteRenderer: {fileID: 4363211988109751681}
   spriteTransform: {fileID: 4803503847927066771}
-  collider: {fileID: 1624942764016206224}
 --- !u!1 &6785455453488607449
 GameObject:
   m_ObjectHideFlags: 0
@@ -522,7 +461,6 @@ GameObject:
   - component: {fileID: 4803503847927066771}
   - component: {fileID: 4363211988109751681}
   - component: {fileID: 560115481816191536}
-  - component: {fileID: 8678375172401993899}
   m_Layer: 6
   m_Name: Sprite
   m_TagString: Untagged
@@ -622,39 +560,3 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &8678375172401993899
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6785455453488607449}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e8d0727d5ae3244e3b569694d3912374, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ShowTopMostFoldoutHeaderGroup: 1
-  NetworkAnimatorExpanded: 0
-  AuthorityMode: 1
-  m_Animator: {fileID: 560115481816191536}
-  TransitionStateInfoList: []
-  AnimatorParameterEntries:
-    ParameterEntries:
-    - name: X
-      NameHash: -1213057461
-      Synchronize: 1
-      ParameterType: 1
-    - name: Y
-      NameHash: -1061878051
-      Synchronize: 1
-      ParameterType: 1
-    - name: IsWalking
-      NameHash: 1282839668
-      Synchronize: 1
-      ParameterType: 4
-    - name: Attack
-      NameHash: 1080829965
-      Synchronize: 1
-      ParameterType: 9
-  AnimatorParametersExpanded: 0

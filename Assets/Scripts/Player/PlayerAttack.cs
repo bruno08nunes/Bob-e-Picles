@@ -1,4 +1,3 @@
-using NUnit.Framework;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -6,6 +5,7 @@ public class PlayerAttack : NetworkBehaviour
 {
     [SerializeField] Transform attackOrigin;
     [SerializeField] Animator playerAnimator;
+    [SerializeField] float attackDelay = 0.5f;
 
     int attackHash;
 
@@ -15,6 +15,8 @@ public class PlayerAttack : NetworkBehaviour
     MeleeAttack meleeAttack;
 
     bool isMelee;
+
+    private float nextAttackTime;
 
     void Start()
     {
@@ -32,16 +34,26 @@ public class PlayerAttack : NetworkBehaviour
     void Update()
     {
         if (!IsOwner)
-        {
             return;
-        }
+
+        if (Time.time < nextAttackTime)
+            return;
 
         if (!InputManager.WasAttackPressed())
-        {
             return;
-        }
 
-        playerAnimator.SetTrigger(attackHash);
+        nextAttackTime = Time.time + attackDelay;
+
+        AttackRpc(
+            playerMove.LookDirection,
+            playerMove.AttackOriginPosition
+        );
+    }
+
+    [Rpc(SendTo.Server)]
+    void AttackRpc(Vector2 direction, Vector2 position)
+    {
+        PlayAttackRpc();
 
         if (isMelee)
         {
@@ -49,6 +61,13 @@ public class PlayerAttack : NetworkBehaviour
             return;
         }
 
-        spawnProjectile.ShootRpc(playerMove.LookDirection);
+        spawnProjectile.ShootRpc(direction, position);
+    }
+
+    [Rpc(SendTo.ClientsAndHost)]
+    void PlayAttackRpc()
+    {
+        playerAnimator.SetTrigger(attackHash);
+        playerMove.SetIsAttacking(0.5f);
     }
 }

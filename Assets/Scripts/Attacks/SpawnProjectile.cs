@@ -6,7 +6,7 @@ public class SpawnProjectile : NetworkBehaviour
     [SerializeField] GameObject projectilePrefab;
 
     [Rpc(SendTo.Server)]
-    public void ShootRpc(Vector2 direction)
+    public void ShootRpc(Vector2 direction, Vector2 position)
     {
         float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
 
@@ -14,7 +14,7 @@ public class SpawnProjectile : NetworkBehaviour
 
         GameObject projectile = Instantiate(
             projectilePrefab,
-            transform.position,
+            position,
             rotation
         );
 

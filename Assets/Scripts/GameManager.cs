@@ -23,8 +23,6 @@ public class GameManager : NetworkBehaviour
 
         SpawnPlayers();
 
-        return;
-
         for (float position = -4f; position <= 4f; position += 2)
         {
             var instance = Instantiate(collectablePrefab, new Vector3(position, 4, 0), Quaternion.Euler(new Vector3(0f, 0f, 0f)));
