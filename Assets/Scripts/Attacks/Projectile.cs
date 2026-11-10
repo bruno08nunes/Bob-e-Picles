@@ -24,6 +24,18 @@ public class Projectile : NetworkBehaviour
             return;
         }
 
+        if (collision.gameObject.TryGetComponent<Enemy>(out var enemy))
+        {
+            enemy.TakeDamage(2);
+            return;
+        }
+
+        if (collision.gameObject.TryGetComponent<Player>(out var player))
+        {
+            player.TakeDamage(2);
+            return;
+        }
+
         GetComponent<NetworkObject>().Despawn();
     }
 }
