@@ -4,7 +4,20 @@ using UnityEngine;
 
 public class GameUIManager : NetworkBehaviour
 {
+    public GameUIManager Instance { get; private set; }
+
     [SerializeField] TextMeshProUGUI textPoints;
+
+    private void Awake()
+    {
+        if (Instance != null)
+        {
+            Destroy(Instance);
+            return;
+        }
+
+        Instance = this;
+    }
 
     private void Start()
     {
@@ -18,6 +31,12 @@ public class GameUIManager : NetworkBehaviour
 
     private void OnPointsChanged(int _, int next)
     {
-        textPoints.text = "Pontos: " + next.ToString();
+        ChangePointsUIRpc(next);
+    }
+
+    [Rpc(SendTo.ClientsAndHost)]
+    private void ChangePointsUIRpc(int points)
+    {
+        textPoints.text = "Pontos: " + points.ToString();
     }
 }

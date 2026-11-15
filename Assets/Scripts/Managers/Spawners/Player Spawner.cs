@@ -1,58 +1,27 @@
 using Unity.Netcode;
 using UnityEngine;
 
-public class GameManager : NetworkBehaviour
+public class PlayerSpawner : NetworkBehaviour
 {
-    public static GameManager Instance { get; private set; }
-
-    public NetworkVariable<int> Points { get; private set; } = new NetworkVariable<int>();
-
-    [SerializeField] GameObject collectablePrefab;
-    [SerializeField] GameObject enemyPrefab;
-
     [SerializeField] private NetworkObject bobPrefab;
     [SerializeField] private NetworkObject piclesPrefab;
 
     [SerializeField] private Transform player1SpawnPoint;
     [SerializeField] private Transform player2SpawnPoint;
 
-    public override void OnNetworkSpawn()
+    private void Update()
     {
-        if (!IsServer)
+        if (GameManager.Instance == null)
+        {
             return;
+        }
+
+        if (!IsServer || GameManager.Instance.HasGameStarted)
+        {
+            return;
+        }
 
         SpawnPlayers();
-
-        for (float position = -4f; position <= 4f; position += 2)
-        {
-            var instance = Instantiate(collectablePrefab, new Vector3(position, 4, 0), Quaternion.Euler(new Vector3(0f, 0f, 0f)));
-            instance.GetComponent<NetworkObject>().Spawn();
-        }
-
-        for (float position = -4f; position <= 4f; position += 8)
-        {
-            var instance = Instantiate(enemyPrefab, new Vector3(position, 1, 0), Quaternion.Euler(new Vector3(0f, 0f, 0f)));
-            instance.GetComponent<NetworkObject>().Spawn();
-        }
-    }
-
-    private void Awake()
-    {
-        if (Instance != null)
-        {
-            Destroy(gameObject);
-            return;
-        }
-
-        Instance = this;
-    }
-
-    public void IncrementPoints(int point)
-    {
-        if (IsServer)
-        {
-            Points.Value++;
-        }
     }
 
     private void SpawnPlayers()
@@ -117,6 +86,8 @@ public class GameManager : NetworkBehaviour
         SpawnPlayer(hostId, characterSync.Player1Character.Value, player1SpawnPoint);
 
         SpawnPlayer(secondPlayerId, characterSync.Player2Character.Value, player2SpawnPoint);
+
+        GameManager.Instance.StartGame();
     }
 
     private void SpawnPlayer(ulong clientId, char character, Transform spawnPoint)
