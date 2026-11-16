@@ -33,6 +33,16 @@ public class Door : MonoBehaviour
         onEnterDoor?.Invoke();
     }
 
+    private void OnTriggerStay2D(Collider2D collision)
+    {
+        if (!collision.CompareTag("Player"))
+        {
+            return;
+        }
+
+        onEnterDoor?.Invoke();
+    }
+
     public void GoToUpRoom()
     {
         SceneController.GoToUpScene();

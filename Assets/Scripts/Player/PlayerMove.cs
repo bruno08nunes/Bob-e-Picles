@@ -23,10 +23,16 @@ public class PlayerMove : NetworkBehaviour
     [SerializeField] private LayerMask predictionCollisionLayers = ~0;
     [SerializeField] private float collisionSkin = 0.02f;
 
+    [Header("Position Lock")]
+    [SerializeField] private float positionLockDuration = 0.2f;
+
+    private float movementLockedUntil;
+
     private readonly RaycastHit2D[] predictionHits = new RaycastHit2D[8];
     private ContactFilter2D predictionFilter;
 
     private Rigidbody2D rb;
+    private Collider2D collisionCollider;
 
     private Vector2 direction;
     private Vector2 lookDirection = Vector2.down;
@@ -56,6 +62,24 @@ public class PlayerMove : NetworkBehaviour
 
         IsAttacking = false;
         attackCoroutine = null;
+    }
+
+    private void LockMovement()
+    {
+        movementLockedUntil = Time.time + positionLockDuration;
+
+        direction = Vector2.zero;
+
+        rb.linearVelocity = Vector2.zero;
+
+        collisionCollider.enabled = false;
+
+        UpdateAnimator(Vector2.zero);
+    }
+
+    private bool IsMovementLocked()
+    {
+        return Time.time < movementLockedUntil;
     }
 
     private int hashIsWalking;
@@ -88,6 +112,7 @@ public class PlayerMove : NetworkBehaviour
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
+        collisionCollider = GetComponent<CapsuleCollider2D>();
 
         predictionFilter = new ContactFilter2D();
         predictionFilter.SetLayerMask(predictionCollisionLayers);
@@ -127,6 +152,11 @@ public class PlayerMove : NetworkBehaviour
 
     private void Update()
     {
+        if (!collisionCollider.enabled && !IsMovementLocked())
+        {
+            collisionCollider.enabled = true;
+        }
+
         if (!IsSpawned || !IsOwner)
             return;
 
@@ -169,7 +199,7 @@ public class PlayerMove : NetworkBehaviour
 
     private void CaptureInput()
     {
-        if (IsAttacking)
+        if (IsMovementLocked() || IsAttacking)
         {
             direction = Vector2.zero;
             UpdateAnimator(Vector2.zero);
@@ -207,12 +237,14 @@ public class PlayerMove : NetworkBehaviour
 
     private PlayerInputData CreateInput()
     {
+        bool locked = IsMovementLocked() || IsAttacking;
+
         return new PlayerInputData
         {
-            Direction = IsAttacking ? Vector2.zero : direction,
+            Direction = locked ? Vector2.zero : direction,
             LookDirection = lookDirection,
             Tick = ++currentTick,
-            IsAttacking = IsAttacking
+            IsAttacking = locked
         };
     }
 
@@ -306,7 +338,7 @@ public class PlayerMove : NetworkBehaviour
 
     private void SimulateMovement(PlayerInputData input)
     {
-        if (input.IsAttacking)
+        if (IsMovementLocked() || input.IsAttacking)
         {
             rb.linearVelocity = Vector2.zero;
             UpdateAnimator(Vector2.zero);
@@ -394,6 +426,14 @@ public class PlayerMove : NetworkBehaviour
         lastAcknowledgedTick = serverState.LastProcessedTick;
 
         inputBuffer.RemoveConfirmed(lastAcknowledgedTick);
+
+        if (IsMovementLocked())
+        {
+            rb.position = serverState.Position;
+            rb.linearVelocity = Vector2.zero;
+            UpdateAnimator(Vector2.zero);
+            return;
+        }
 
         rb.position = serverState.Position;
         rb.linearVelocity = serverState.Velocity;
@@ -583,5 +623,30 @@ public class PlayerMove : NetworkBehaviour
 
         attackOrigin.localRotation =
             Quaternion.Euler(0, 0, angle);
+    }
+
+    public void SetPosition(Vector3 position)
+    {
+        SetPositionServerRpc(position);
+    }
+
+    [Rpc(SendTo.Server)]
+    private void SetPositionServerRpc(Vector3 position)
+    {
+        LockMovement();
+
+        rb.position = position;
+        rb.linearVelocity = Vector2.zero;
+
+        SetPositionClientRpc(position);
+    }
+
+    [Rpc(SendTo.ClientsAndHost)]
+    private void SetPositionClientRpc(Vector3 position)
+    {
+        LockMovement();
+
+        rb.position = position;
+        rb.linearVelocity = Vector2.zero;
     }
 }
