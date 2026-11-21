@@ -8,15 +8,15 @@ public class PlayerProjectileObjectPool :
 
     override protected void Awake()
     {
-        //if (Instance != null)
-        //{
-        //    Destroy(gameObject);
-        //    return;
-        //}
+        if (Instance != null)
+        {
+            Destroy(gameObject);
+            return;
+        }
 
-        //Instance = this;
-        //DontDestroyOnLoad(gameObject);
+        Instance = this;
+        DontDestroyOnLoad(gameObject);
 
-        //base.Awake();
+        base.Awake();
     }
 }

@@ -180,6 +180,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 4294967295
   collisionSkin: 0.02
+  positionLockDuration: 0.2
 --- !u!50 &-2985942418925416823
 Rigidbody2D:
   serializedVersion: 5
@@ -275,6 +276,7 @@ MonoBehaviour:
   ShowTopMostFoldoutHeaderGroup: 1
   invulnerabilityDuration: 0.8
   flashInterval: 0.1
+  characterIndex: 1
   spriteRenderer: {fileID: 4363211988109751681}
   spriteTransform: {fileID: 4803503847927066771}
 --- !u!1 &6785455453488607449

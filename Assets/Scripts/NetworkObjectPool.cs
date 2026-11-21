@@ -58,6 +58,11 @@ public abstract class NetworkObjectPool<T> : MonoBehaviour, INetworkPrefabInstan
 
     public static NetworkObject Get(Vector3 position, Quaternion rotation)
     {
+        if (pool == null)
+        {
+            return null;
+        }
+
         NetworkObject networkObject = pool.Get();
 
         networkObject.transform.SetPositionAndRotation(position, rotation);

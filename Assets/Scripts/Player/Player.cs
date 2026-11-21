@@ -6,6 +6,7 @@ public class Player : NetworkBehaviour
 {
     [SerializeField] private float invulnerabilityDuration = 0.8f;
     [SerializeField] private float flashInterval = 0.1f;
+    [SerializeField] private int characterIndex = 0;
 
     [SerializeField] private SpriteRenderer spriteRenderer;
     [SerializeField] private Transform spriteTransform;
@@ -48,9 +49,11 @@ public class Player : NetworkBehaviour
         }
 
         Life.Value -= damage;
+        GameUIManager.Instance.RemoveHeartRpc(damage, characterIndex);
 
         if (Life.Value <= 0)
         {
+            GameManager.Instance.PlayerDie();
             Die();
             return;
         }

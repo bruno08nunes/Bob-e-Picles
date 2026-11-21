@@ -40,7 +40,7 @@ public class SceneController : NetworkBehaviour
         Instance = this;
         DontDestroyOnLoad(gameObject);
 
-        CurrentScene = 12;
+        Reset();
 
         if (transitionCanvasGroup != null)
         {
@@ -113,7 +113,7 @@ public class SceneController : NetworkBehaviour
                 break;
         }
 
-        for (int i = 0; i < 2; i++)
+        for (int i = 0; i < players.Length; i++)
         {
             players[i].SetPosition(positions[i]);
         }
@@ -363,5 +363,19 @@ public class SceneController : NetworkBehaviour
         }
 
         LoadScene(targetScene, "Down");
+    }
+
+    private void Reset()
+    {
+        CurrentScene = 12;
+    }
+
+    public static void GoToFirstRoom()
+    {
+        Instance.Reset();
+        NetworkManager.Singleton.SceneManager.LoadScene(
+            Instance.scenes[Instance.CurrentScene].GetSceneName(),
+            LoadSceneMode.Single
+        );
     }
 }

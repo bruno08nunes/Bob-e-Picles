@@ -11,6 +11,11 @@ public class SpawnProjectile : NetworkBehaviour
 
         NetworkObject projectile = PlayerProjectileObjectPool.Get(transform.position, rotation);
 
+        if (projectile == null)
+        {
+            return;
+        }
+
         projectile.Spawn();
     }
 }
