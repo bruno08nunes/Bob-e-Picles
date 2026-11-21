@@ -1,5 +1,8 @@
+using System.Collections;
 using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.Utilities;
 
 public class GameManager : NetworkBehaviour
 {
@@ -41,7 +44,8 @@ public class GameManager : NetworkBehaviour
         }
     }
 
-    private void ResetValues()
+    [Rpc(SendTo.Server)]
+    private void ResetValuesRpc()
     {
         Points.Value = 0;
         HasGameStarted = false;
@@ -55,14 +59,42 @@ public class GameManager : NetworkBehaviour
         GameUIManager.Instance.InstantiateHearts(5, 1);
     }
 
+    [Rpc(SendTo.ClientsAndHost)]
+    private void EnableGameOverRpc()
+    {
+        GameUIManager.Instance.EnableGameOverScreen();
+    }
+
+    [Rpc(SendTo.ClientsAndHost)]
+    private void DisableGameOverRpc()
+    {
+        GameUIManager.Instance.DisableGameOverScreen();
+    }
+
+    private void Reset()
+    {
+        SceneController.GoToFirstRoom();
+        ResetValuesRpc();
+        InstantiateHeartsRpc();
+        DisableGameOverRpc();
+    }
+
+    private IEnumerator AnyButtonPressed()
+    {
+        yield return new WaitForSeconds(2f);
+        InputSystem.onAnyButtonPress.CallOnce((InputControl _) =>
+        {
+            Reset();
+        });
+    }
+
     public void PlayerDie()
     {
         playersAlive--;
         if (playersAlive == 0)
         {
-            SceneController.GoToFirstRoom();
-            ResetValues();
-            InstantiateHeartsRpc();
+            EnableGameOverRpc();
+            StartCoroutine(nameof(AnyButtonPressed));
         }
     }
 }

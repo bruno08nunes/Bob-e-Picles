@@ -10,6 +10,7 @@ public class GameUIManager : NetworkBehaviour
     [SerializeField] private TextMeshProUGUI textPoints;
     [SerializeField] private GameObject[] heartsContainers;
     [SerializeField] private GameObject heartPrefab;
+    [SerializeField] private GameObject gameOverScreen;
 
     private List<GameObject>[] playerHearts = new List<GameObject>[2];
 
@@ -60,6 +61,11 @@ public class GameUIManager : NetworkBehaviour
         if (heartContainer == null)
             return;
 
+        if (playerHearts[player].Count > 0)
+        {
+            return;
+        }
+
         for (int i = 0; i < amount; i++)
         {
             GameObject heart = Instantiate(heartPrefab, heartContainer.transform);
@@ -98,5 +104,15 @@ public class GameUIManager : NetworkBehaviour
 
         GameObject heart = Instantiate(heartPrefab, heartContainer.transform);
         playerHearts[player].Add(heart);
+    }
+
+    public void EnableGameOverScreen()
+    {
+        gameOverScreen.SetActive(true);
+    }
+
+    public void DisableGameOverScreen()
+    {
+        gameOverScreen.SetActive(false);
     }
 }
