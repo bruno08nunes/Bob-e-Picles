@@ -11,6 +11,8 @@ public class EnemyAttack : MonoBehaviour
 
     MeleeAttack meleeAttack;
 
+    bool isDead = false;
+
     void Start()
     {
         attackHash = Animator.StringToHash("Attack");
@@ -27,12 +29,17 @@ public class EnemyAttack : MonoBehaviour
 
     public void Attack()
     {
-        if (attackTime < attackDelay)
+        if (attackTime < attackDelay || isDead)
         {
             return;
         }
         meleeAttack.AttackRpc();
         animator.SetTrigger(attackHash);
         attackTime = 0;
+    }
+
+    public void Die()
+    {
+        isDead = true;
     }
 }

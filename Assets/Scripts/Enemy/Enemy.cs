@@ -7,6 +7,10 @@ public class Enemy : NetworkBehaviour
     [SerializeField] private float invulnerabilityDuration = 0.8f;
     [SerializeField] private float flashInterval = 0.1f;
 
+    [SerializeField] EnemyChase chase;
+    [SerializeField] EnemyAttack attack;
+    [SerializeField] EnemyUI ui;
+
     [SerializeField] private SpriteRenderer spriteRenderer;
     [SerializeField] private Transform spriteTransform;
     private new CapsuleCollider2D collider;
@@ -40,6 +44,12 @@ public class Enemy : NetworkBehaviour
         UpdateHitAnimation();
     }
 
+    [Rpc(SendTo.ClientsAndHost)]
+    private void SetDamageUIRpc(int currentHealth)
+    {
+        ui.SetHealth(currentHealth, 5);
+    }
+
     public void TakeDamage(int damage)
     {
         if (!IsServer || isInvulnerable || isDead || damage <= 0)
@@ -47,7 +57,9 @@ public class Enemy : NetworkBehaviour
             return;
         }
 
+        SetDamageUIRpc(Life.Value - damage);
         Life.Value -= damage;
+        chase.ResetAttackedTimer();
 
         if (Life.Value <= 0)
         {
@@ -70,6 +82,7 @@ public class Enemy : NetworkBehaviour
             return;
         }
 
+        attack.Die();
         isDead = true;
         isInvulnerable = true;
         deathTimer = 0f;

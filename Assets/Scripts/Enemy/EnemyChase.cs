@@ -15,6 +15,7 @@ public class EnemyChase : MonoBehaviour
     private Transform[] players;
     private Transform target;
     private float timer;
+    private float attackedTimer = 2;
 
     private bool isWalking;
 
@@ -54,6 +55,7 @@ public class EnemyChase : MonoBehaviour
     private void Update()
     {
         timer += Time.deltaTime;
+        attackedTimer += Time.deltaTime;
 
         if (timer >= targetUpdateInterval)
         {
@@ -68,7 +70,7 @@ public class EnemyChase : MonoBehaviour
                 ((Vector2)target.position -
                  (Vector2)transform.position).sqrMagnitude;
 
-            if (distance < 5f)
+            if (distance < 5f && attackedTimer >= 2f)
                 enemyAttack.Attack();
         }
 
@@ -152,5 +154,10 @@ public class EnemyChase : MonoBehaviour
         ) * Mathf.Rad2Deg;
 
         attackOrigin.localRotation = Quaternion.Euler(0f, 0f, angle);
+    }
+
+    public void ResetAttackedTimer()
+    {
+        attackedTimer = 0;
     }
 }
