@@ -14,6 +14,8 @@ public class GameManager : NetworkBehaviour
 
     private int playersAlive = 2;
 
+    [SerializeField] private SoundEffectData gameOverSound;
+
     private void Awake()
     {
         if (Instance != null)
@@ -95,6 +97,7 @@ public class GameManager : NetworkBehaviour
         {
             EnableGameOverRpc();
             StartCoroutine(nameof(AnyButtonPressed));
+            SoundManager.Instance.PlaySFX(gameOverSound);
         }
     }
 }

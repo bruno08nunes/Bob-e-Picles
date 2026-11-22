@@ -73,3 +73,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ShowTopMostFoldoutHeaderGroup: 1
+  gameOverSound: {fileID: 11400000, guid: a243cea02a96c1c4289d0711b77b30cf, type: 2}

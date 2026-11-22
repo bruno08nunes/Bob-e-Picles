@@ -4,6 +4,7 @@ using UnityEngine;
 public class Collectable : NetworkBehaviour
 {
     [SerializeField] Sprite[] sprites;
+    [SerializeField] SoundEffectData collectSoundEffect;
 
     SpriteRenderer spriteRenderer;
 
@@ -31,7 +32,15 @@ public class Collectable : NetworkBehaviour
     {
         GameManager.Instance.IncrementPoints(10);
 
+        PlaySoundRpc();
+
         GetComponent<NetworkObject>().Despawn();
         Destroy(gameObject);
+    }
+
+    [Rpc(SendTo.ClientsAndHost)]
+    private void PlaySoundRpc()
+    {
+        SoundManager.Instance.PlaySFX(collectSoundEffect);
     }
 }

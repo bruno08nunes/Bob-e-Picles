@@ -7,6 +7,7 @@ public class Player : NetworkBehaviour
     [SerializeField] private float invulnerabilityDuration = 0.8f;
     [SerializeField] private float flashInterval = 0.1f;
     [SerializeField] private int characterIndex = 0;
+    [SerializeField] private SoundEffectData damageSoundEffect;
 
     [SerializeField] private SpriteRenderer spriteRenderer;
     [SerializeField] private Transform spriteTransform;
@@ -41,6 +42,12 @@ public class Player : NetworkBehaviour
         UpdateHitAnimation();
     }
 
+    [Rpc(SendTo.ClientsAndHost)]
+    private void PlayDamageSoundRpc()
+    {
+        SoundManager.Instance.PlaySFX(damageSoundEffect);
+    }
+
     public void TakeDamage(int damage)
     {
         if (!IsServer || isInvulnerable || isDead || damage <= 0)
@@ -50,6 +57,7 @@ public class Player : NetworkBehaviour
 
         Life.Value -= damage;
         GameUIManager.Instance.RemoveHeartRpc(damage, characterIndex);
+        PlayDamageSoundRpc();
 
         if (Life.Value <= 0)
         {

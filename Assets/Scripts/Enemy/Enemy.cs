@@ -6,6 +6,7 @@ public class Enemy : NetworkBehaviour
 {
     [SerializeField] private float invulnerabilityDuration = 0.8f;
     [SerializeField] private float flashInterval = 0.1f;
+    [SerializeField] private SoundEffectData damageSoundEffect;
 
     [SerializeField] EnemyChase chase;
     [SerializeField] EnemyAttack attack;
@@ -50,6 +51,13 @@ public class Enemy : NetworkBehaviour
         ui.SetHealth(currentHealth, 5);
     }
 
+
+    [Rpc(SendTo.ClientsAndHost)]
+    private void PlayDamageSoundRpc()
+    {
+        SoundManager.Instance.PlaySFX(damageSoundEffect);
+    }
+
     public void TakeDamage(int damage)
     {
         if (!IsServer || isInvulnerable || isDead || damage <= 0)
@@ -60,6 +68,7 @@ public class Enemy : NetworkBehaviour
         SetDamageUIRpc(Life.Value - damage);
         Life.Value -= damage;
         chase.ResetAttackedTimer();
+        PlayDamageSoundRpc();
 
         if (Life.Value <= 0)
         {

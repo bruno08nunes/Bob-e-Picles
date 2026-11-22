@@ -6,6 +6,7 @@ public class PlayerAttack : NetworkBehaviour
     [SerializeField] Transform attackOrigin;
     [SerializeField] Animator playerAnimator;
     [SerializeField] float attackDelay = 0.5f;
+    [SerializeField] SoundEffectData attackSoundEffect;
 
     int attackHash;
 
@@ -69,5 +70,10 @@ public class PlayerAttack : NetworkBehaviour
     {
         playerAnimator.SetTrigger(attackHash);
         playerMove.SetIsAttacking(0.5f);
+
+        if (attackSoundEffect != null)
+        {
+            SoundManager.Instance.PlaySFX(attackSoundEffect);
+        }
     }
 }

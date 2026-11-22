@@ -224,6 +224,7 @@ MonoBehaviour:
   attackOrigin: {fileID: 7061106487903432060}
   playerAnimator: {fileID: 560115481816191536}
   attackDelay: 0.5
+  attackSoundEffect: {fileID: 11400000, guid: 22f03778029bdc54bb0caac0b77975fb, type: 2}
 --- !u!70 &1624942764016206224
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -277,6 +278,7 @@ MonoBehaviour:
   invulnerabilityDuration: 0.8
   flashInterval: 0.1
   characterIndex: 1
+  damageSoundEffect: {fileID: 11400000, guid: 22f03778029bdc54bb0caac0b77975fb, type: 2}
   spriteRenderer: {fileID: 4363211988109751681}
   spriteTransform: {fileID: 4803503847927066771}
 --- !u!1 &6785455453488607449

@@ -368,6 +368,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ShowTopMostFoldoutHeaderGroup: 1
   weapon: {fileID: 6993107915576984315}
+  attackSoundEffect: {fileID: 11400000, guid: 6aaabbbeb8fb42849a83a12e16989db7, type: 2}
 --- !u!1 &3911407563272141571
 GameObject:
   m_ObjectHideFlags: 0
@@ -552,6 +553,7 @@ MonoBehaviour:
   ShowTopMostFoldoutHeaderGroup: 1
   invulnerabilityDuration: 0.8
   flashInterval: 0.1
+  damageSoundEffect: {fileID: 11400000, guid: 3ae10a74ed8e74849883b29095f8e4de, type: 2}
   chase: {fileID: 3939367523905996761}
   attack: {fileID: 1049633250486088347}
   ui: {fileID: 3678070508949827280}

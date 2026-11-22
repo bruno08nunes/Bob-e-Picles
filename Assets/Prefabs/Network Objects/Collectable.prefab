@@ -176,3 +176,4 @@ MonoBehaviour:
   - {fileID: 19289143, guid: 9d17fd9ed38817440a20aa6ca90890dc, type: 3}
   - {fileID: 298475279, guid: 9d17fd9ed38817440a20aa6ca90890dc, type: 3}
   - {fileID: 696606110, guid: 9d17fd9ed38817440a20aa6ca90890dc, type: 3}
+  collectSoundEffect: {fileID: 11400000, guid: b4343294c4cb018488ea7365e89f8224, type: 2}
