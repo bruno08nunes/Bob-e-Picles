@@ -54,6 +54,11 @@ public class EnemyChase : MonoBehaviour
 
     private void Update()
     {
+        if (GameManager.Instance.IsPaused)
+        {
+            return;
+        }
+
         timer += Time.deltaTime;
         attackedTimer += Time.deltaTime;
 

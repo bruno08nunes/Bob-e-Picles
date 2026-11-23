@@ -157,7 +157,7 @@ public class PlayerMove : NetworkBehaviour
             collisionCollider.enabled = true;
         }
 
-        if (!IsSpawned || !IsOwner)
+        if (!IsSpawned || !IsOwner || GameManager.Instance.IsPaused)
             return;
 
         CaptureInput();

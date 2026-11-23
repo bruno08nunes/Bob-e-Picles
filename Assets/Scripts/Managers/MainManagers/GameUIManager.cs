@@ -11,6 +11,7 @@ public class GameUIManager : NetworkBehaviour
     [SerializeField] private GameObject[] heartsContainers;
     [SerializeField] private GameObject heartPrefab;
     [SerializeField] private GameObject gameOverScreen;
+    [SerializeField] private GameObject menu;
 
     private List<GameObject>[] playerHearts = new List<GameObject>[2];
 
@@ -33,6 +34,20 @@ public class GameUIManager : NetworkBehaviour
     private void Start()
     {
         GameManager.Instance.Points.OnValueChanged += OnPointsChanged;
+    }
+
+    private void Update()
+    {
+        if (InputManager.WasPausePressed())
+        {
+            if (GameManager.Instance.IsPaused)
+            {
+                ResumeRpc();
+                return;
+            }
+
+            PauseRpc();
+        }
     }
 
     public override void OnNetworkSpawn()
@@ -114,5 +129,26 @@ public class GameUIManager : NetworkBehaviour
     public void DisableGameOverScreen()
     {
         gameOverScreen.SetActive(false);
+    }
+
+    [Rpc(SendTo.ClientsAndHost)]
+    public void PauseRpc()
+    {
+        GameManager.Instance.Pause();
+        menu.SetActive(true);
+    }
+
+    [Rpc(SendTo.ClientsAndHost)]
+    public void ResumeRpc()
+    {
+        GameManager.Instance.Resume();
+        menu.SetActive(false);
+    }
+
+    [Rpc(SendTo.ClientsAndHost)]
+    public void ExitGameRpc()
+    {
+        GameManager.Instance.ExitGame();
+        SessionManager.Instance.GoBackToMainMenu();
     }
 }

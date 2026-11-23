@@ -11,6 +11,7 @@ public class GameManager : NetworkBehaviour
     public NetworkVariable<int> Points { get; private set; } = new NetworkVariable<int>();
 
     public bool HasGameStarted { get; private set; } = false;
+    public bool IsPaused { get; private set; } = false;
 
     private int playersAlive = 2;
 
@@ -99,5 +100,24 @@ public class GameManager : NetworkBehaviour
             StartCoroutine(nameof(AnyButtonPressed));
             SoundManager.Instance.PlaySFX(gameOverSound);
         }
+    }
+
+    public void Pause()
+    {
+        Time.timeScale = 0f;
+        IsPaused = true;
+    }
+
+    public void Resume()
+    {
+        Time.timeScale = 1f;
+        IsPaused = false;
+    }
+
+    public void ExitGame()
+    {
+        Destroy(gameObject);
+        Instance = null;
+        Time.timeScale = 1;
     }
 }

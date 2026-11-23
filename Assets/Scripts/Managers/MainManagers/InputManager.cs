@@ -4,7 +4,7 @@ using UnityEngine.InputSystem;
 public class InputManager : MonoBehaviour
 {
     public InputManager Instance { get; private set; }
-    static InputAction move, attack;
+    static InputAction move, attack, pause;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -19,6 +19,7 @@ public class InputManager : MonoBehaviour
 
         move = InputSystem.actions.FindAction("Move");
         attack = InputSystem.actions.FindAction("Attack");
+        pause = InputSystem.actions.FindAction("Pause");
     }
 
     public static Vector2 GetMove()
@@ -29,5 +30,10 @@ public class InputManager : MonoBehaviour
     public static bool WasAttackPressed()
     {
         return attack.WasPressedThisFrame();
+    }
+
+    public static bool WasPausePressed()
+    {
+        return pause.WasPressedThisFrame();
     }
 }

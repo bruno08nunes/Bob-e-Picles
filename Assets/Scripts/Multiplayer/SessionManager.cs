@@ -31,7 +31,7 @@ public class SessionManager : MonoBehaviour
 
     public ISession CurrentSession => currentSession;
 
-    private static SessionManager Instance;
+    public static SessionManager Instance { get; private set; }
 
     private void Awake()
     {

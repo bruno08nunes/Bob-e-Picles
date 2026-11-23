@@ -43,6 +43,9 @@ public class PlayerAttack : NetworkBehaviour
         if (!InputManager.WasAttackPressed())
             return;
 
+        if (GameManager.Instance.IsPaused)
+            return;
+
         nextAttackTime = Time.time + attackDelay;
 
         AttackRpc(
