@@ -493,4 +493,12 @@ public class SessionManager : MonoBehaviour
 
         Debug.Log(message);
     }
+
+    public void GoBackToMainMenu()
+    {
+        LeaveRoom();
+
+        SceneManager.LoadScene("MainMenu");
+        Destroy(gameObject);
+    }
 }

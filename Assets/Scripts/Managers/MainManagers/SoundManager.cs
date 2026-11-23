@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Audio;
 
 public class SoundManager : MonoBehaviour
 {
@@ -17,6 +18,12 @@ public class SoundManager : MonoBehaviour
 
         Instance = this;
         DontDestroyOnLoad(gameObject);
+    }
+
+    private void Update()
+    {
+        musicSource.volume = SettingsManager.GetMusicVolume();
+        sfxSource.volume = SettingsManager.GetVolume();
     }
 
     public void ChangeMusic(AudioClip clip)
@@ -52,6 +59,6 @@ public class SoundManager : MonoBehaviour
     public void PlaySFX(SoundEffectData soundEffect)
     {
         sfxSource.pitch = soundEffect.pitch;
-        sfxSource.PlayOneShot(soundEffect.clip, soundEffect.volume);
+        sfxSource.PlayOneShot(soundEffect.clip, soundEffect.volume * SettingsManager.GetVolume());
     }
 }

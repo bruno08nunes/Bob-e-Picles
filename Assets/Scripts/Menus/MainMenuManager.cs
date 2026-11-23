@@ -17,7 +17,7 @@ public class MainMenuManager : MonoBehaviour
 
     public void Settings()
     {
-        Debug.Log("Not created");
+        SceneManager.LoadScene("Settings");
     }
 
     public void ExitGame()

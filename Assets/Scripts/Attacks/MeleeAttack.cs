@@ -16,9 +16,6 @@ public class MeleeAttack : NetworkBehaviour
     public void PlayAttackRpc()
     {
         weapon.Attack();
-        Debug.Log(attackSoundEffect);
         SoundManager.Instance.PlaySFX(attackSoundEffect);
-        Debug.Log(nameof(SoundManager.Instance.PlaySFX));
-        Debug.Log(SoundManager.Instance);
     }
 }
