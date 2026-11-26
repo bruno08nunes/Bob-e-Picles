@@ -4984,7 +4984,7 @@ PrefabInstance:
       objectReference: {fileID: 875353658}
     - target: {fileID: 763614988629589717, guid: 460ac74e872322f4cb07797d72704aa7, type: 3}
       propertyPath: onEnterDoor.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: 
+      value: GoToLeftRoom
       objectReference: {fileID: 0}
     - target: {fileID: 763614988629589717, guid: 460ac74e872322f4cb07797d72704aa7, type: 3}
       propertyPath: onEnterDoor.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
@@ -5083,7 +5083,7 @@ Transform:
   m_GameObject: {fileID: 898454600}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -6, y: 3, z: 0}
+  m_LocalPosition: {x: -6, y: -6, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -5114,7 +5114,7 @@ Transform:
   m_GameObject: {fileID: 1023574725}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 6, y: 3, z: 0}
+  m_LocalPosition: {x: 6, y: -6, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -5196,7 +5196,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ShowTopMostFoldoutHeaderGroup: 1
   prefab: {fileID: 3911407563272141571, guid: 41614141305ac3c48b86f3a5cf5ce768, type: 3}
-  positions: []
+  positions:
+  - {fileID: 898454601}
+  - {fileID: 1023574726}
 --- !u!1 &1166723519
 GameObject:
   m_ObjectHideFlags: 0
@@ -9393,7 +9395,7 @@ PrefabInstance:
       objectReference: {fileID: 1791784513}
     - target: {fileID: 763614988629589717, guid: 460ac74e872322f4cb07797d72704aa7, type: 3}
       propertyPath: onEnterDoor.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: 
+      value: GoToRighttRoom
       objectReference: {fileID: 0}
     - target: {fileID: 763614988629589717, guid: 460ac74e872322f4cb07797d72704aa7, type: 3}
       propertyPath: onEnterDoor.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
@@ -9531,7 +9533,7 @@ MonoBehaviour:
   m_BuildHeightMesh: 0
   m_MinRegionArea: 0
   m_HideEditorLogs: 0
-  m_NavMeshData: {fileID: 23800000, guid: 1e344858df86c5d439200c5d890da946, type: 2}
+  m_NavMeshData: {fileID: 23800000, guid: dfbee47226f480544be7813ad6d498ec, type: 2}
 --- !u!4 &1814657608
 Transform:
   m_ObjectHideFlags: 0

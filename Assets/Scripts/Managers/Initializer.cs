@@ -5,6 +5,7 @@ public class Initializer : NetworkBehaviour
 {
     [SerializeField] NetworkObject gameManager;
     [SerializeField] NetworkObject gameUI;
+    [SerializeField] NetworkObject keyManager;
 
     private void Start()
     {
@@ -18,5 +19,8 @@ public class Initializer : NetworkBehaviour
 
         NetworkObject gameUIObject = Instantiate(gameUI);
         gameUIObject.Spawn();
+
+        NetworkObject keyManagerObject = Instantiate(keyManager);
+        keyManagerObject.Spawn();
     }
 }

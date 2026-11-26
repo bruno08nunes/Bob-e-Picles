@@ -554,6 +554,7 @@ MonoBehaviour:
   ShowTopMostFoldoutHeaderGroup: 1
   gameManager: {fileID: 5525890846847638314, guid: 417774aff9aca3f44b12158bdf97ee61, type: 3}
   gameUI: {fileID: 8297796932462147853, guid: 714daf3e02f65864fb7e4de35cf020d5, type: 3}
+  keyManager: {fileID: 4686900578714724611, guid: c9d42f322e2f94740a99bdb7e0b537d8, type: 3}
 --- !u!114 &390393980
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2394,7 +2395,7 @@ TilemapRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
+  - {fileID: 2100000, guid: 489591ceb7532fa4da1b22d49e87ccc4, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

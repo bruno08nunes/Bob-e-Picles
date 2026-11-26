@@ -606,9 +606,9 @@ MonoBehaviour:
   - {fileID: 11400000, guid: f82237fe9b08f634f82a17dc76fb15d8, type: 2}
   - {fileID: 0}
   - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 11400000, guid: 72247cc11aff63d418d8bf93f7a2e021, type: 2}
   - {fileID: 11400000, guid: da57ebed65d9bc640878fce4a799d375, type: 2}
-  - {fileID: 0}
+  - {fileID: 11400000, guid: c206785e2a6f5b84ab01486d369f1612, type: 2}
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
